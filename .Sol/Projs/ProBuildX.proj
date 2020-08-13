@@ -1,0 +1,39 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+  </PropertyGroup>
+
+  <!-- Imports -->
+  <Import Project="build\build.targets" />
+  <Import Project=".pack\package.csproj" Condition="Exists('.pack\package.csproj')" />
+
+  <!-- .Pack -->
+  <ItemGroup>
+    <Folder Include=".pack" />
+    <Content  Include=".pack\**" PackagePath=".pack\"  Pack="true" IncludeInPackage="true"  />
+    <!-- <Content Include=".pack\**" Pack="true" IncludeInPackage="true" BuildAction="Content" PackagePath="content\any\any\.pack;contentFiles\any\any\.pack;;" /> -->
+    <!-- <None Update=".pack\**" Pack="true" IncludeInPackage="true" PackagePath="content\any\any\.pack;contentFiles\any\any\.pack;;" /> -->
+  </ItemGroup>
+
+  <!-- Build -->
+  <ItemGroup>
+    <Content Include="build\*.targets" PackagePath="build\" />
+  </ItemGroup>
+
+  <!-- Remove -->
+  <ItemGroup>
+    <Compile Remove=".pack\Logs\**" />
+    <Compile Remove=".pack\Shorx\**" />
+    <Compile Remove="build\Archives\**" />
+    <Compile Remove=".pack\TODO.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.Build.Framework" Version="16.5.0" />
+    <PackageReference Include="Microsoft.Build.Utilities.Core" Version="16.5.0" />
+    <PackageReference Include="ProDevelopers.BaseTypes" Version="0.5.0.6" />
+    <PackageReference Include="ProDevelopers.Emailing" Version="0.8.2.3" />
+  </ItemGroup>
+
+</Project>

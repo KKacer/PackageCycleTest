@@ -1,0 +1,55 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <NuspecFile>build\ProBuild.nuspec</NuspecFile>
+    <NoWarn>NU5100</NoWarn>
+  </PropertyGroup>
+
+  <!-- .Pack -->
+  <ItemGroup>
+    <Content Include=".pack\**" PackagePath=".pack\" />
+    <Content Remove=".pack\package.csproj" />
+    <!-- <Content Include=".pack\**" IncludeInPackage="false" /> -->
+    <!-- <PackItems    Include=".pack\**" PackagePath=".pack\"  Pack="true" IncludeInPackage="true"  /> -->
+    <!-- <Content  Include=".pack\**" PackagePath="content\any\any\.pack;contentFiles\any\any\.pack;;" Pack="true" IncludeInPackage="true"  /> -->
+  </ItemGroup>
+
+  <!-- Build -->
+  <ItemGroup>
+
+    <!-- <Content Include=".pack\**" IncludeInPackage="false" /> -->
+    <Content Include="build\**" PackagePath="build\" />
+
+    <!-- <Content Include="build\*.targets" PackagePath="build\" /> -->
+    <!-- <Content  Include="build\**" PackagePath="content\any\any\build\" /> -->
+    <!-- <Content  Include="build\**" PackagePath="content\any\any\build\" Pack="true" IncludeInPackage="true"  /> -->
+    <!--<None Include=".pack\build.targets" />-->
+  </ItemGroup>
+
+  <!-- Templates and Extra -->
+
+  <!-- Imports -->
+  <Import Project=".pack\build.targets" Condition="Exists('.pack\build.targets')" />
+  <Import Project=".pack\package.csproj" Condition="Exists('.pack\package.csproj')" />
+
+  <!-- Libs -->
+  <!--<ItemGroup>
+    <Content Include="..\..\.libs\*.*" Link="Libs\%(Filename)%(Extension)" IncludeInPackage="true" PackagePath="Libs\" />
+  </ItemGroup>-->
+
+  <!-- Remove -->
+  <ItemGroup>
+    <Compile Remove=".pack\Logs\**" />
+    <Compile Remove=".pack\Shorx\**" />
+    <Compile Remove="build\arch\**" /> 
+  </ItemGroup>
+  <ItemGroup>
+    <Folder Include=".pack\Logzz\" />
+    <Folder Include="build\arch\" />
+  </ItemGroup>
+  <ItemGroup>
+    <Content Update="build\ProDevelopers.ProBuildX.targets" IncludeInPackage="false" CopyToOutputDirectory="false" />
+  </ItemGroup>
+
+</Project>

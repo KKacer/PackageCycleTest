@@ -1,0 +1,17 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<package xmlns="http://schemas.microsoft.com/packaging/2012/06/nuspec.xsd">
+  <metadata>
+    <id>Company.NugLib</id>
+    <version>0.6.0</version>
+    <title>Company.NugLib</title>
+    <authors>KK</authors>
+    <owners>KK</owners>
+    <requireLicenseAcceptance>false</requireLicenseAcceptance>
+    <description>build engine</description>
+    <tags>continuos-delivery</tags>
+  </metadata>
+
+  <files>
+    <file src="..\*.txt" target="Texts\" />
+  </files>
+</package>

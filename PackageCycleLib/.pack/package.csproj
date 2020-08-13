@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project>
+  <!-- Version-->
+  <PropertyGroup>
+    <Version>0.9.109</Version>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+  </PropertyGroup>
+  <!--ProBuild Props-->
+  <PropertyGroup>
+    <Untouched>Original</Untouched>
+  </PropertyGroup>
+  <!--ID, Title-->
+  <PropertyGroup>
+    <Title>ProDevelopers.ProBuild</Title>
+    <PackageId>ProDevelopers.ProBuild</PackageId>
+    <Product>ProDevelopers.ProBuild</Product>
+  </PropertyGroup>
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  -->
+  <!-- Description, Tags-->
+  <PropertyGroup>
+    <Description>ProDevelopers.ProBuild, ProDevelopers build engine</Description>
+    <PackageTags>ProBuild,build,msbuild,packaging,automation</PackageTags>
+  </PropertyGroup>
+  <!--Author, Company-->
+  <PropertyGroup>
+    <Authors>ProDevelopers, KasraK</Authors>
+    <Company>ProDevelopers</Company>
+  </PropertyGroup>
+  <!--Repository-->
+  <!--<PropertyGroup>
+    <PackageProjectUrl>https://github.com/ProDevelopers/</PackageProjectUrl>
+    <RepositoryUrl>https://github.com/ProDevelopers/</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+  </PropertyGroup>-->
+  <!--Self Include-->
+  <ItemGroup>
+    <None Include=".pack\package.csproj" />
+  </ItemGroup>
+  <!--Licensing-->
+  <!--<PropertyGroup>
+    <PackageLicenseFile>LICENSE</PackageLicenseFile>
+  </PropertyGroup>
+  <ItemGroup>
+    <None Include="..\LICENSE">
+      <Pack>True</Pack>
+      <PackagePath></PackagePath>
+    </None>
+  </ItemGroup>-->
+  <PropertyGroup>
+    <NoWarn>NU5104;NU5129;NU5100</NoWarn>
+  </PropertyGroup>
+</Project>
+<!--NU5100: The assembly 'Libs\TrelloMailerConsole.dll' is not inside the 'lib' folder and hence it won't be added as a reference-->

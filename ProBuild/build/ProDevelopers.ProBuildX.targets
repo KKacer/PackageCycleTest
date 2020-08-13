@@ -1,0 +1,215 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!-- ===================================================================================== -->
+  <!-- 1. Properties -->
+  <PropertyGroup>
+    <!-- ... Conditions ... -->
+    <!-- ... Locations ... -->
+    <!-- Flag file-->
+    <FlagProps>$(MSBuildProjectDirectory)\.Pack\Flags\props.flag</FlagProps>
+    <FlagStyles>$(MSBuildProjectDirectory)\.Pack\Flags\WebStyles.flag</FlagStyles>
+    <!-- EditProjectProps -->
+    <LibFolder>$(SolutionDir).libs</LibFolder>
+    <SolFolder>$(SolutionDir).Sol</SolFolder>
+    <PropsExe>$(LibFolder)\EditProjectProps.exe</PropsExe>
+    <!--<ProBuildState></ProBuildState>-->
+    <!--<NeedWebTargets></NeedWebTargets>-->
+    <NeedWebTargets Condition=" '$(NeedWebTargets)' == '' ">n</NeedWebTargets>
+    <ProBuildState Condition=" '$(ProBuildState)' == '' ">n</ProBuildState>
+    <!--<ProBuildVersion>1.0.0.0</ProBuildVersion>-->
+    <!--<ProBuildVersionFile>$(MSBuildProjectDirectory)\.Pack\Flags\ProBuild.version</ProBuildVersionFile>-->
+  </PropertyGroup>
+
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  -->
+  <!-- 2. LibsCloner: Copy Libs-->
+  <!--Condition="!Exists($(LibFolder))" , 
+  Condition="!Exists('$(LibFolder)\%(RecursiveDir)%(Filename)%(Extension)')"
+   SkipUnchangedFiles="true" , may set again later 
+   CopyBuildCore;PreBuildEvent
+   -->
+
+  <!--Condition="!Exists('$(LibFolder)\%(RecursiveDir)%(Filename)%(Extension)')"
+  Condition="!Exists('$(SolFolder)\%(RecursiveDir)%(Filename)%(Extension)')"-->
+
+  <ItemGroup>
+    <LibItems Include="$(MSBuildThisFileDirectory)..\Libs\*.*" />
+  </ItemGroup>
+
+  <!--AND $(ProBuildState) !='Done'"-->
+  <Target Name="LibsCloner" BeforeTargets="CopyBuildCore" Condition="!Exists($(FlagProps))">
+    <Message Text="**** Start: ProBuild-Master LibsCloner: Going to move libs" Importance="high" />
+    <!--<Exec Command="$(LibsClonerExe) $(SolutionDir)" />-->
+    <Message Importance="high" Text="LibFolder exists" Condition="Exists($(LibFolder))" />
+
+    <Message Importance="high" Text="LibItems : @(LibItems)" />
+    <Message Importance="high" Text="SolItems : @(SolItems)" />
+    <Copy SourceFiles="@(LibItems)"
+          DestinationFiles="$(LibFolder)\%(RecursiveDir)%(Filename)%(Extension)"
+    />
+
+    <Message Text="Libs moved!" Importance="high" />
+    <Message Text="==================================================" Importance="high" />
+  </Target>
+
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  -->
+  <!-- 3. Copy Build -->
+  <!--Will add items right before build - only once
+  <Target Name="CopyBuildOnce" BeforeTargets="PreBuildEvent" Condition="!Exists($(DoneBaseFile))" > 
+  <Target Name="CopyBuildCore"  BeforeTargets="PreBuildEvent" Condition="!Exists($(FlagProps))" >
+    AfterTargets="CoreCompile" DependsOnTargets="PrepareForBuild"
+  PreBuildEvent , Build , CoreCompile
+  PreBuildEvent was fine,
+  AfterTargets="LibsCloner"
+  BeforeTargets="CoreCompile" PreBuildEvent
+  Will add items on install-->
+
+  <!--AND $(ProBuildState) !='Done'-->
+  <ItemGroup>
+    <BuildItems Include="$(MSBuildThisFileDirectory)..\build\**"
+                Exclude="$(MSBuildThisFileDirectory)..\build\ProDevelopers.ProBuild.targets"/>
+  </ItemGroup>
+  <Target Name="CopyBuildCore" BeforeTargets="PreBuildEvent" Condition="!Exists($(FlagProps))" >
+    <Message Importance="high" Text="**** Start:  ProBuild-Master -CopyBuildCore: Copying ProBuild:" />
+    <Message Importance="high" Text="FlagProps : $(FlagProps)" />
+    <Message Importance="high" Text="Hurrai! FlagProps exists" Condition="Exists($(FlagProps))" />
+    <Message Importance="high" Text="FlagProps not exists" Condition="!Exists($(FlagProps))" />
+    <Message Importance="high" Text="BuildItems : @(BuildItems)" />
+    <Copy SourceFiles="@(BuildItems)"
+          DestinationFiles="$(MsBuildProjectDirectory)\build\%(RecursiveDir)%(Filename)%(Extension)"
+          Condition="!Exists('$(MsBuildProjectDirectory)\build\%(RecursiveDir)%(Filename)%(Extension)')"
+    />
+    <Message Text="==================================================" Importance="high" />
+  </Target>
+
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  -->
+  <!-- 4. Copy Pack -->
+  <!--Be aware of these 2 names: CopyBuildCore & CopyBuildOnce
+  <Target Name="CopyPack" AfterTargets="CopyBuildCore" Condition="!Exists($(FlagProps))" >
+  SkipUnchangedFiles="true"
+  <PackItems Include="$(MSBuildThisFileDirectory)..\.pack\**" />
+  <Packages Include="src\*.*" Exclude="@(ExistingPackages -> 'src\%(FileName)%(Extension)')" />
+  <Packages Include="src\*.*" Exclude="@(ExistingPackages -> '$(MsBuildProjectDirectory)\.pack\%(RecursiveDir)%(FileName)%(Extension)')" />
+ MHM: Will exclude the existing files from being copied.-->
+
+  <!--AND $(ProBuildState) !='Done'-->
+  <ItemGroup>
+    <PackItems Include="$(MSBuildThisFileDirectory)..\.pack\**" />
+  </ItemGroup>
+  <Target Name="CopyPack" AfterTargets="CopyBuildCore" Condition="!Exists($(FlagProps))" >
+    <Message Importance="high" Text="**** Start: CopyBuildCore -CopyPack: PackItems" />
+    <Message Importance="high" Text="PackItems : @(PackItems)" />
+    <Copy SourceFiles="@(PackItems)"
+          DestinationFiles="$(MsBuildProjectDirectory)\.pack\%(RecursiveDir)%(Filename)%(Extension)"
+          Condition="!Exists('$(MsBuildProjectDirectory)\.pack\%(RecursiveDir)%(Filename)%(Extension)')"
+    />
+    <Message Text="==================================================" Importance="high" />
+  </Target>
+
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...    -->
+  <!-- 5. Edit Props // Add lines -->
+  <!--DependsOnTargets="PrepareForBuild" DependsOnTargets="LibsCloner;CopyPack"-->
+  <!--AND $(ProBuildState) !='Done'-->
+
+  <!--<ItemGroup>
+    <WebStyleImporterTMPL Include="$(MSBuildThisFileDirectory)..\WebStylesImporterTMPL.targets" />
+  </ItemGroup>
+  <Target Name="CopyWebStylesTargets" AfterTargets="PropsEdit" DependsOnTargets="PropsEdit" Condition="$(NeedWebTargets) =='yes'">
+    <Message Text="**** Start: CopyWebStylesTargets" Importance="high" />
+    <Message Text="NeedWebTargets is: $(NeedWebTargets)" Importance="high" />
+    <Copy SourceFiles="@(WebStyleImporterTMPL)"
+          DestinationFiles="$(MsBuildProjectDirectory)\build\'$(PackageId).targets'"/>
+    --><!--DestinationFiles="@(WebStyleImporterTMPL->Replace('WebStylesImporterTMPL.targets','$(PackageId).targets'))"/>--><!--
+  </Target>-->
+
+  <ItemGroup>
+    <WebStyleImporterTMPL Include="$(MSBuildThisFileDirectory)..\WebStylesImporterTMPL.targets" />
+  </ItemGroup>
+
+  <!--AfterTargets="PropsEdit"-->
+
+  <!-- ... ... ... Test Vars ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...   -->
+  <!-- 6. Test Vars - when needed -->
+  <!--BeforeTargets="CopyBuild" - BeforeTargets="LibsCloner" -->
+
+  <Target Name="TestConditions" AfterTargets="CopyPack">
+    <Message Text="Here 1" Importance="high" Condition="!Exists($(FlagProps))" />
+    <Message Text="Here 2" Importance="high" Condition="$(ProBuildState) !='Done'" />
+  </Target>
+
+  <Target Name="TestConditions2" DependsOnTargets="PropsEdit">
+    <Message Text="Here 3" Importance="high" Condition="$(ProBuildState) !='Done'" />
+    <Message Text="Oops, not wanted, ProBuildState is : $(ProBuildState) instead of being 'Done'" Importance="high" />
+  </Target>
+
+  <Target Name="TestConditions3" AfterTargets="TestConditions" Condition="!Exists($(FlagProps)) AND $(ProBuildState) !='Done'">
+    <Message Text="Here 4" Importance="high" />
+  </Target>
+
+  <Target Name="TestVars">
+    <Message Text=" Untouched  = $(Untouched)" Importance="high" />
+    <Message Text=" TestVar  = $(TestVar)" Importance="high" />
+
+    <Message Text=" MSBuildProjectDirectory  = $(MSBuildProjectDirectory)" Importance="high" />
+    <Message Text=" MSBuildProjectFile  = $(MSBuildProjectFile)" Importance="high" />
+    <Message Text=" MSBuildProjectExtension  = $(MSBuildProjectExtension)" Importance="high" />
+    <Message Text=" MSBuildProjectFullPath  = $(MSBuildProjectFullPath)" Importance="high" />
+    <Message Text=" MSBuildProjectName  = $(MSBuildProjectName)" Importance="high" />
+    <Message Text=" MSBuildBinPath  = $(MSBuildBinPath)" Importance="high" />
+    <Message Text=" MSBuildProjectDefaultTargets  = $(MSBuildProjectDefaultTargets)" Importance="high" />
+    <Message Text=" MSBuildExtensionsPath  = $(MSBuildExtensionsPath)" Importance="high" />
+    <Message Text=" MSBuildStartupDirectory  = $(MSBuildStartupDirectory)" Importance="high"/>
+
+    <Message Importance="high" Text="==== MHM: Copying ProBuild:" />
+    <Message Importance="high" Text="== Here ==" />
+    <Message Importance="high" Text="== RootFolder : $(RootFolder)" />
+    <Message Importance="high" Text="== ProBuildItems : @(ProBuildItems)" />
+    <Message Importance="high" Text="== ProBuildItems 2: @(ProBuildItems2)" />
+
+   <Message Importance="high" Text="== ProBuildItems 3: @(ProBuildItems3)" />    
+    <Message Importance="high" Text="== MSBuildProjectFile: $(MSBuildProjectFile)" /> 
+
+    <Message Importance="high" Text="==== MHM: Copying NugLib:" />
+    <Message Importance="high" Text="== Here ==" />
+    <Message Text="PackageId: $(PackageId)" Importance="high" />
+    <Message Text="MSBuildProjectName: $(MSBuildProjectName)" Importance="high" />
+    <Message Text="MSBuildThisFile : $(MSBuildThisFile)" Importance="high" />
+    <Message Text="MSBuildThisFileDirectory : $(MSBuildThisFileDirectory)" Importance="high" />
+    <Message Text="MSBuildThisFileDirectoryNoRoot: $(MSBuildThisFileDirectoryNoRoot)" Importance="high" />
+    <Message Text="MSBuildThisFileName: $(MSBuildThisFileName)" Importance="high" />
+    <Message Text="OutputPath : $(OutputPath)" Importance="high" />
+    <Message Text="ProjectName: $(ProjectName)" Importance="high" />
+    <Message Text="MSBuildProjectDirectory: $(MSBuildProjectDirectory)" Importance="high" />
+    <Message Text="PackageArchiveRootDir: $(PackageArchiveRootDir)" Importance="high" />
+    <Message Text="AssemblyName: $(AssemblyName)" Importance="high" />
+    <Message Text="==================================================" Importance="high" />
+  </Target>
+
+</Project>
+
+<!--<BasePackageFile>package.csproj</BasePackageFile>
+<PackageFile>$(MSBuildThisFileDirectory)..\$(BasePackageFile)</PackageFile>
+<RootFolder>$([System.IO.Path]::GetDirectoryName($(MSBuildProjectDirectory)))</RootFolder>
+<MainCsProjFile>$(MSBuildThisFileDirectory)..\$(MSBuildProjectName)</MainCsProjFile>
+
+    <BuildItems Include="..\contentFiles\any\any\build\**" />
+    <PackItems Include="..\contentFiles\any\any\**" />
+    contentFiles\any\any or content\any\any 
+    
+  <Target Name="WhereAmI">
+    <Message Text=" Here I Am  " />
+    <Exec Command="dir ." />
+    <Message Text=" " />
+  </Target>
+
+  <Target Name="ShowOtherProperties">
+    <Message Text="  " />
+    <Message Text="  " />
+    <Message Text=" Environment (SET) Variables*       " />
+    <Message Text=" COMPUTERNAME = *$(COMPUTERNAME)*   " />
+    <Message Text=" USERDNSDOMAIN = *$(USERDNSDOMAIN)* " />
+    <Message Text=" USERDOMAIN = *$(USERDOMAIN)*       " />
+    <Message Text=" USERNAME = *$(USERNAME)*           " />
+  </Target>    
+
+-->

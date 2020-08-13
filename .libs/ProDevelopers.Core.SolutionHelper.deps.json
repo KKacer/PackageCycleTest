@@ -1,0 +1,217 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.1/",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.1": {},
+    ".NETStandard,Version=v2.1/": {
+      "ProDevelopers.Core.SolutionHelper/1.5.0": {
+        "dependencies": {
+          "Serilog": "2.10.0-dev-01191",
+          "Serilog.Sinks.File": "5.0.0-dev-00880"
+        },
+        "runtime": {
+          "ProDevelopers.Core.SolutionHelper.dll": {}
+        }
+      },
+      "Microsoft.NETCore.Platforms/1.1.0": {},
+      "Microsoft.NETCore.Targets/1.1.0": {},
+      "Serilog/2.10.0-dev-01191": {
+        "runtime": {
+          "lib/netstandard2.1/Serilog.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.10.0.0"
+          }
+        }
+      },
+      "Serilog.Sinks.File/5.0.0-dev-00880": {
+        "dependencies": {
+          "Serilog": "2.10.0-dev-01191",
+          "System.IO.FileSystem": "4.3.0",
+          "System.Text.Encoding.Extensions": "4.3.0",
+          "System.Threading.Timer": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard2.0/Serilog.Sinks.File.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "5.0.0.0"
+          }
+        }
+      },
+      "System.IO/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.IO.FileSystem/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.IO": "4.3.0",
+          "System.IO.FileSystem.Primitives": "4.3.0",
+          "System.Runtime": "4.3.0",
+          "System.Runtime.Handles": "4.3.0",
+          "System.Text.Encoding": "4.3.0",
+          "System.Threading.Tasks": "4.3.0"
+        }
+      },
+      "System.IO.FileSystem.Primitives/4.3.0": {
+        "dependencies": {
+          "System.Runtime": "4.3.0"
+        },
+        "runtime": {
+          "lib/netstandard1.3/System.IO.FileSystem.Primitives.dll": {
+            "assemblyVersion": "4.0.2.0",
+            "fileVersion": "4.6.24705.1"
+          }
+        }
+      },
+      "System.Runtime/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0"
+        }
+      },
+      "System.Runtime.Handles/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Text.Encoding/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Text.Encoding.Extensions/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0",
+          "System.Text.Encoding": "4.3.0"
+        }
+      },
+      "System.Threading.Tasks/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0"
+        }
+      },
+      "System.Threading.Timer/4.3.0": {
+        "dependencies": {
+          "Microsoft.NETCore.Platforms": "1.1.0",
+          "Microsoft.NETCore.Targets": "1.1.0",
+          "System.Runtime": "4.3.0"
+        }
+      }
+    }
+  },
+  "libraries": {
+    "ProDevelopers.Core.SolutionHelper/1.5.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "Microsoft.NETCore.Platforms/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-bZWrI24wdeTIWTEE3FkpOfuPp/Z6Abfd9oxyxL971xFAQSRHW8FaxaMX/hs93TO1OKD+Nph6cZZSutz7sCP7WA==",
+      "path": "microsoft.netcore.platforms/1.1.0",
+      "hashPath": "microsoft.netcore.platforms.1.1.0.nupkg.sha512"
+    },
+    "Microsoft.NETCore.Targets/1.1.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-chOLWDV7oEfqnIb7rnibMkcY3gHlOd3TJCaGsppqBM1EbuolTDZk71EQ9CkCIC16gFjwMaoUScPbpv6gAb9Y5Q==",
+      "path": "microsoft.netcore.targets/1.1.0",
+      "hashPath": "microsoft.netcore.targets.1.1.0.nupkg.sha512"
+    },
+    "Serilog/2.10.0-dev-01191": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-0ZG/gpldpDBGXEjDKHIcQCe3E4ufv98Iaxn2b4X54bOPWJJssquP2QiTEkWIXbaoDvmegUWB3fHwwHQhFgedJw==",
+      "path": "serilog/2.10.0-dev-01191",
+      "hashPath": "serilog.2.10.0-dev-01191.nupkg.sha512"
+    },
+    "Serilog.Sinks.File/5.0.0-dev-00880": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-3NsdteItVxUccSvWeCPesdmxy4xGjCz0aZBHM8FeMxhuClAIRnWSFD/k0EfZ+OAYmJZEYdaa4+NjsCUjqKPQZw==",
+      "path": "serilog.sinks.file/5.0.0-dev-00880",
+      "hashPath": "serilog.sinks.file.5.0.0-dev-00880.nupkg.sha512"
+    },
+    "System.IO/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-cV+7/xafClzpekkI6CiPR9PNp6FLQx7A5jfIeueww5TQOLOaB6I14iBhSqrowwQW/K+qTcevI/e6ZQtWialMfQ==",
+      "path": "system.io/4.3.0",
+      "hashPath": "system.io.4.3.0.nupkg.sha512"
+    },
+    "System.IO.FileSystem/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-t2oKcSdE5L/QNZ5myO8hRC+t44aZ9EATE3s2XRqbZcy9fiKlmSLaAUpQ+usxa8I604TQnRgv3M/DqW3Cjt+XLw==",
+      "path": "system.io.filesystem/4.3.0",
+      "hashPath": "system.io.filesystem.4.3.0.nupkg.sha512"
+    },
+    "System.IO.FileSystem.Primitives/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-l3dksW4GbKrHybyPq7+pFyHDqJWfwMZOYJRwEFPYgkuXUmsHG2QIBviez0AYtwtj1wQ2OAdaU2HQesLsO1zwzg==",
+      "path": "system.io.filesystem.primitives/4.3.0",
+      "hashPath": "system.io.filesystem.primitives.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-JufQi0vPQ0xGnAczR13AUFglDyVYt4Kqnz1AZaiKZ5+GICq0/1MH/mO/eAJHt/mHW1zjKBJd7kV26SrxddAhiw==",
+      "path": "system.runtime/4.3.0",
+      "hashPath": "system.runtime.4.3.0.nupkg.sha512"
+    },
+    "System.Runtime.Handles/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-E6iDAKSowQSoeURk3VFyQ/aUFWe45kKdBitR36L7lERbEDggbbpakXI6U9kHsxG4oG1q0Crhfwy2mUikoOvNqg==",
+      "path": "system.runtime.handles/4.3.0",
+      "hashPath": "system.runtime.handles.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encoding/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-e9dNB5643C3s1cD1UFvJsrenDdyUFP3rUCGBH8k/AbYeClT6L76iHZFV9cnCLJ+0um53v2b22NPQhPoBRS3+MQ==",
+      "path": "system.text.encoding/4.3.0",
+      "hashPath": "system.text.encoding.4.3.0.nupkg.sha512"
+    },
+    "System.Text.Encoding.Extensions/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GQSvFDCL5wLgHzsUmNfDW+Qi/Fd6ye2w+Fk+LgR/oa9LjWYIZnIMUKz1t33X0w6ruepMa3fBmNN7zdCEquiNfw==",
+      "path": "system.text.encoding.extensions/4.3.0",
+      "hashPath": "system.text.encoding.extensions.4.3.0.nupkg.sha512"
+    },
+    "System.Threading.Tasks/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xMvsJEpwBUoPevEK9ncYGinsiohzG1ImTqPJ5HWB7LkctdinHQVRibh7mchIVF+H+8YI5ePmFtBMSB52FHs0qQ==",
+      "path": "system.threading.tasks/4.3.0",
+      "hashPath": "system.threading.tasks.4.3.0.nupkg.sha512"
+    },
+    "System.Threading.Timer/4.3.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-DlbJEusNrVPKUmCyB1yGgD4+AdbYLeKjJowDS/sqpyLNNoMDhZC2aNzRjDP1ksYYzUHFpaZvPQyhNP8uynlLTQ==",
+      "path": "system.threading.timer/4.3.0",
+      "hashPath": "system.threading.timer.4.3.0.nupkg.sha512"
+    }
+  }
+}

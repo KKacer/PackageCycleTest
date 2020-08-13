@@ -1,0 +1,53 @@
+﻿<Project ToolsVersion="12.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  
+  <!-- ===================================================================================== -->
+  <!-- 1. Properties -->
+
+  <PropertyGroup>
+    <DoZip>true</DoZip>
+    <DoTrello>true</DoTrello>
+    <LibFolder>$(SolutionDir)\.Libs</LibFolder>
+    <ExeFile>$(LibFolder)\ConsoleTest.exe</ExeFile>
+    <Argument></Argument>
+    <!--For trello-->
+    <Body>$(PackageReleaseNotes)</Body>
+    <BodyTrimmed>$(PackageReleaseNotes.Replace('%0D%0A','^'))</BodyTrimmed>
+    <TrelloMailerExe>$(LibFolder)\TrelloMailerConsole.exe</TrelloMailerExe>
+    <!-- Still not finished: TrelloMailerConsole-->
+  </PropertyGroup>
+
+  <!-- ===================================================================================== -->
+  <!-- 2. Imports and usings -->
+  <Import Project="$(LibFolder)\tools\MSBuild.Community.Tasks.Targets"/>
+  <UsingTask AssemblyFile="$(LibFolder)\tools\MSBuild.Community.Tasks.Targets.dll"
+             TaskName="MSBuild.Community.Tasks.Zip" />
+
+  <!-- ===================================================================================== -->
+  <!-- 3. ExeRun -->
+
+  <Target Name="ExeRun" AfterTargets="Build">
+    <Message Text="=== Trying Exe ===" Importance="high" />
+    <!-- <Exec Command="$(ExeFile) $(Argument)" /> -->
+    <Message Text=" == Exe file executed : $(ExeFile) with argument: $(Argument)" Importance="high" />
+  </Target>
+
+  <!-- ===================================================================================== -->
+  <!-- 4. Trello -->
+
+  <!-- Earlier was CoreCompile -->
+  <Target Name="TrelloMailRun" AfterTargets="Build" Condition="'$(DoZip)' == 'true' AND '$(DoTrello)' == 'true'">
+    <PropertyGroup>
+      <ZipFile>$(ZipLocation)\$(PackageId).$(PackageVersion)-$(StringDate).zip</ZipFile>
+      <Subject>$(PackageId).$(PackageVersion)</Subject>
+    </PropertyGroup>
+    <Message Text="=== Trying Trello ===" Importance="high" />
+    <Message Text="Subject before running exe is: '$(Subject)'" Importance="high" />
+    <Message Text="Subject before running exe is 2: &quot;$(Subject)&quot;" Importance="high" />
+    <Message Text="Subject before running exe is 3: $(Subject)" Importance="high" />
+    <Message Text="Body is:  $(Body)" Importance="high" />
+
+    <!-- <Exec Command="$(TrelloMailerExe)" /> -->
+    <Exec Command="$(TrelloMailerExe) '$(ZipFile)' &quot;$(Subject)&quot; &quot;$(BodyTrimmed)&quot;" />
+    <Message Text=" == Trello record created and the attachment uploaded and attached: $(ZipFile)" Importance="high" />
+  </Target>
+</Project>

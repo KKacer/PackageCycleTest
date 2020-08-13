@@ -1,0 +1,41 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+
+  <!-- ===================================================================================== -->
+  <!-- 1. Properties -->
+  <PropertyGroup>
+    <!-- ... Conditions ... -->
+    <!-- ... Locations ... -->
+    <FlagStylesComp>$(MSBuildProjectDirectory)\.Pack\Flags\WebStyles2.flag</FlagStylesComp>
+    <ProComponentStyleFolder Condition=" '$(ProComponentStyleFolder)' == '' ">ComponentStyles</ProComponentStyleFolder>
+  </PropertyGroup>
+
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  -->
+  <!-- 2. EnsureComponentStyleFolderExists-->
+  <Target Name="EnsureComponentStyleFolderExists" BeforeTargets="CopyCompStyles" Condition="!Exists($(FlagStylesComp))">
+    <MakeDir Directories="$(MsBuildProjectDirectory)/wwwroot/$(ProComponentStyleFolder)" ContinueOnError="true"/>
+  </Target>
+
+  <!-- ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...  -->
+  <!-- 3. Copy Component Styles -->
+  <ItemGroup>
+    <ComponentStyles Include="$(MSBuildThisFileDirectory)..\staticwebassets\ComponentStyles\**" />
+  </ItemGroup>
+
+  <Target Name="CopyCompStyles" BeforeTargets="CoreCompile" Condition="!Exists($(FlagStylesComp))">
+    <Message Importance="high" Text="**** Start:  ProBuild-Master -in WebStyles-CopyCompStyles:" />
+    <Message Importance="high" Text="ComponentStyles : @(ComponentStyles)" />
+    <Copy SourceFiles="@(ComponentStyles)"
+          DestinationFiles="$(MsBuildProjectDirectory)\wwwroot\ComponentStyles\%(RecursiveDir)%(Filename)%(Extension)"
+          SkipUnchangedFiles="true"
+    />
+    <WriteLinesToFile File="$(FlagStylesComp)" Overwrite="true" Lines="aa" />
+    <Message Text="==================================================" Importance="high" />
+  </Target>
+
+  <!-- ... ... ... Test AfterCopy Component Styles  ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ... ...   -->
+  <Target Name="CopyCompStylesAfter" AfterTargets="CopyCompStyles">
+    <Message Text="CopyCompStylesAfter: CopyCompStyles is done." Importance="High" />
+  </Target>
+
+</Project>

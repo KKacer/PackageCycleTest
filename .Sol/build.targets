@@ -1,0 +1,173 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+
+  <!--! ProBuild Engine version 1 -  by ProDevelopers.co -->
+  <!-- ===================================================================================== -->
+  <!-- 1. Properties -->
+
+  <PropertyGroup>
+
+    <!-- Condition vars  ,,,,,,,, -->
+    <!-- ... Zip, Nug, Trello ... -->
+    <DoZip>false</DoZip>
+    <DoNuget>true</DoNuget>
+    <DoTrello>false</DoTrello>
+    <!-- ... SOL ... -->
+    <SolutionTitle>ProBuild</SolutionTitle>
+    <DoZipSolution>false</DoZipSolution>
+    <DoTrelloSolution>false</DoTrelloSolution>
+    <!-- ... LIB ... -->
+    <MakeALib>false</MakeALib>
+    <!-- ... . ...  ... . ...  ... . ...  ... . ...  ... . ...  ... . ... -->
+    <!-- Calculations & mixed -->
+    <StringDate>$([System.DateTime]::Now.ToString('yyyy.MM.dd'))</StringDate>
+    <!-- Locations -->
+    <LibFolder>$(SolutionDir).libs</LibFolder>
+    <ZipLocation>D:\Wylix\NugsRepo\ZipRepo</ZipLocation>
+    <NugetLocation>D:\Wylix\NugsRepo</NugetLocation>
+    <ReleaseNotesFile>$(MSBuildProjectDirectory)\.pack\ReleaseNotes.txt</ReleaseNotesFile>
+    <!-- Exe files -->
+    <TrelloMailerExe>$(LibFolder)\TrelloMailerConsole.exe</TrelloMailerExe>
+    <ZipExe>$(LibFolder)\ProZipper.exe</ZipExe>
+
+  </PropertyGroup>
+
+  <!-- ===================================================================================== -->
+  <!-- 2. MakeItALib -->
+
+  <Target Name="EnsureFolder" BeforeTargets="MakeItALib" Condition="'$(MakeALib)' == 'true'">
+    <Message Text="Ensuring LibFolder and creating it if needed" Importance="high" />
+    <MakeDir Directories="$(LibFolder)" ContinueOnError="true"/>
+  </Target>
+
+  <ItemGroup>
+    <OutputFiles Include="$(OutputPath)\**"
+                 Exclude="obj\**;**\*.zip;**\*.pdb;**\*.vshost.*;**\*.nupkg"
+    />
+  </ItemGroup>
+
+  <Target Name="MakeItALib" AfterTargets="Build" Condition="'$(MakeALib)' == 'true'"  >
+    <Message Text=" Copying the output file into the Libs folder" Importance="high" />
+    <Message Text=" Output folder: $(OutputPath)" Importance="high" />
+    <Message Text=" Output OutputFiles: @(OutputFiles)" Importance="high" />
+    <Copy
+      SourceFiles="@(OutputFiles)"
+      DestinationFolder="$(LibFolder)\%(RecursiveDir)"
+      SkipUnchangedFiles="true"
+      RetryDelayMilliseconds="1000" Retries="5"
+    />
+
+    <Message Importance="high" Text="Copied the output dll into the lib folder" />
+  </Target>
+
+  <!-- ===================================================================================== -->
+  <!-- 3. NugetMaker -->
+  <Target Name="NugetMaker" AfterTargets="Pack" Condition="'$(DoNuget)' == 'true'">
+
+    <Message Condition="Exists('$(OutputPath)\$(PackageId).$(PackageVersion).nupkg')"
+             Text=" 1st option is existing" Importance="high" />
+    <Message Condition="Exists('$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg')"
+             Text=" 2nd option is existing" Importance="high" />
+
+    <Copy Condition="Exists('$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg')"
+          SourceFiles="$(OutputPath)..\$(PackageId).$(PackageVersion).nupkg"
+          DestinationFolder="$(NugetLocation)"
+    />
+    <!-- $(OutputPath) [2Remove: "\"]  $(PackageId).$(PackageVersion).nupkg" -->
+    <Copy Condition="Exists('$(OutputPath)\$(PackageId).$(PackageVersion).nupkg')"
+          SourceFiles="$(OutputPath)\$(PackageId).$(PackageVersion).nupkg"
+          DestinationFolder="$(NugetLocation)"
+    />
+
+    <Message Text=" == Nuget Built: $(PackageId) $(PackageVersion)" Importance="high" />
+  </Target>
+
+  <!-- ===================================================================================== -->
+  <!-- 4. ZipMaker -->
+
+  <!-- Switching between some targets when necessary, Build, etc -->
+  <Target Name="ZipMaker" AfterTargets="Build" Condition="'$(DoZip)' == 'true' OR '$(DoTrello)' == 'true'">
+    <PropertyGroup>
+      <ZipFile>$(ZipLocation)\$(PackageId).$(PackageVersion)-$(StringDate).zip</ZipFile>
+      <ParamInputFolder>&quot;$(MSBuildProjectDirectory)&quot;</ParamInputFolder>
+      <ParamOutput>&quot;$(ZipFile)&quot;</ParamOutput>
+    </PropertyGroup>
+    <Exec Command="$(ZipExe) $(ParamInputFolder) $(ParamOutput)" />
+    <Message Text=" == Zip Created: $(ZipFile)" Importance="high" />
+  </Target>
+
+
+  <!-- == SOLUTION ========================================================================== -->
+
+  <Target Name="ZipMakerSol" AfterTargets="Build" Condition="'$(DoZipSolution)' == 'true' OR '$(DoTrelloSolution)' == 'true'">
+    <PropertyGroup>
+      <ZipFileSol>$(ZipLocation)\$(SolutionTitle)-Solution-$(StringDate).zip</ZipFileSol>
+      <ParamInputFolderSol>&quot;$(SolutionDir)&quot;</ParamInputFolderSol>
+      <ParamOutputSol>&quot;$(ZipFileSol)&quot;</ParamOutputSol>
+    </PropertyGroup>
+    <Exec Command="$(ZipExe) $(SolutionDir) $(ParamOutputSol)" />
+    <Message Text=" == Solution Zip Created: $(ZipFileSol)" Importance="high" />
+  </Target>
+
+  <!-- ===================================================================================== -->
+  <!-- 5. Trello -->
+
+  <Target Name="RunTrello" AfterTargets="ZipMaker" Condition="'$(DoTrello)' == 'true'" >
+    <PropertyGroup>
+      <ZipFile>$(ZipLocation)\$(PackageId).$(PackageVersion)-$(StringDate).zip</ZipFile>
+      <ParameterFile>&quot;$(ZipFile)&quot;</ParameterFile>
+      <Subject>$(PackageId).$(PackageVersion)</Subject>
+      <Body>&quot;$(ReleaseNotesFile)&quot;</Body>
+    </PropertyGroup>
+    <Exec Command="$(TrelloMailerExe) $(ParameterFile) $(Subject) $(Body)" />
+    <Message Text=" == Trello record created and the attachment uploaded and attached: $(ZipFile)" Importance="high" />
+  </Target>
+
+  <!-- == SOLUTION ========================================================================== -->
+  <Target Name="RunTrelloSol" AfterTargets="ZipMakerSol" Condition="'$(DoTrelloSolution)' == 'true'">
+    <PropertyGroup>
+      <ZipFileSol>$(ZipLocation)\$(SolutionTitle)-Solution-$(StringDate).zip</ZipFileSol>
+      <ParamZip>&quot;$(ZipFileSol)&quot;</ParamZip>
+      <ParamSolPath>$(SolutionDir)$(SolutionTitle).sln</ParamSolPath>
+    </PropertyGroup>
+    <Exec Command="$(TrelloMailerExe) $(ParamZip) $(ParamSolPath)" />
+    <Message Text=" == Trello record for solution created and the attachment uploaded and attached: $(ZipFileSol)" Importance="high" />
+  </Target>
+
+</Project>
+
+<!-- ===================================================================================== -->
+<!-- 6. TestVars n more Ref -->
+
+<!--<Target Name="TestVars"  BeforeTargets="Build">
+    <Message Text="Vars options: " Importance="high" />
+    <Message Text="Subject 1: '$(Subject)'" Importance="high" />
+    <Message Text="Subject 2: &quot;$(Subject)&quot;" Importance="high" />
+    <Message Text="Subject 3: $(Subject)" Importance="high" />
+    <Message Text="xOutLocation: $(xOutLocation)" Importance="high" />
+    <Message Text="xOutParent: $(xOutParent)" Importance="high" />
+    <Message Text="xOutParent3: $(xOutParent3)" Importance="high" />
+    <Message Text="Lib Folder Address calculated: $(LibFolderAddress)" Importance="high" />
+    <Message Text="ZipFile1: $(ZipFile1)" Importance="high" />
+    <Message Text="ZipFile2: $(ZipFile2)" Importance="high" />
+</Target>-->
+
+<!--<Target Name="TrelloByMail" AfterTargets="MakeItALib" Condition="'$(DoTrello)' == 'true' AND '$(DoZip)' == 'true'">
+    <Message Text="=== Trying Trello ===" Importance="high" />
+    <TrelloMailTask Attachment="$(ZipFile)" Subject="$(PackageId).$(PackageVersion)" Body="$(PackageReleaseNotes)" />
+    <Message Text=" == Trello record created and the attachment uploaded and attached: $(ZipFile)" Importance="high" />
+  </Target>
+
+ <LibFolderPart2 Condition="'$(MSBuildRuntimeType)' == 'Core'">netstandard2.1\$(ProBuildToolName)</LibFolderPart2> 
+ <LibFolderPart2 Condition="'$(MSBuildRuntimeType)' != 'Core'">net472\$(ProBuildToolName)</LibFolderPart2> 
+
+ ===================================================================================== 
+ 2. Imports and usings 
+ <Import Project="$(LibFolder)\tools\MSBuild.Community.Tasks.Targets"/> 
+ <UsingTask AssemblyFile="$(LibFolder)\tools\MSBuild.Community.Tasks.Targets.dll" 
+            TaskName="MSBuild.Community.Tasks.Zip" /> 
+
+<UsingTask
+    TaskName="TrelloMailTask"
+    AssemblyFile="$(LibFolder)\$(LibFolderPart2)"
+  />-->

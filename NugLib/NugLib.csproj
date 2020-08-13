@@ -1,0 +1,12 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netstandard2.1</TargetFramework>
+    <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+    <Title>Company.NugLib</Title>
+    <PackageId>Company.NugLib</PackageId>
+    <Product>Company.NugLib</Product>
+    <NuspecFile>build\NugLib.nuspec</NuspecFile>
+  </PropertyGroup>
+
+</Project>

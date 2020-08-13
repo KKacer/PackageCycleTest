@@ -1,0 +1,86 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<Project>
+
+  <!-- ===================================================================================== -->
+  <!-- 1. Properties -->
+
+  <PropertyGroup>
+    <SolutionTitle>ProBuild</SolutionTitle>
+    <!-- Condition vars: Zip, Nug, Trello  ,,,,,,,, -->
+    <!-- ... LIB ... -->
+    <MakeALib>n</MakeALib>
+    <!-- ... . ...  ... . ...  ... . ...  ... . ...  ... . ...  ... . ... -->
+    <!-- Calculations & mixed -->
+    <StringDate>$([System.DateTime]::Now.ToString('yyyy.MM.dd'))</StringDate>
+    <!-- Locations -->
+    <LibFolder>$(SolutionDir).libs</LibFolder>
+    <ZipLocation>D:\Wylix\NugsRepo\ZipRepo</ZipLocation>
+    <NugetLocation>D:\Wylix\NugsRepo</NugetLocation>
+    <!-- Exe files -->
+    <!--<DoneFlagFile>$(MSBuildProjectDirectory)\.Pack\Flags\$(FlagProps)</DoneFlagFile>-->
+    <FlagProps>$(MSBuildProjectDirectory)\.Pack\Flags\props.flag</FlagProps>
+    <FlagZip>$(MSBuildProjectDirectory)\.Pack\Flags\zip.flag</FlagZip>
+    <FlagT>$(MSBuildProjectDirectory)\.Pack\Flags\FFT.flag</FlagT>
+  </PropertyGroup>
+
+  <!-- ===================================================================================== -->
+  <!-- 2. MakeItALib -->
+
+
+  <Target Name="TestProp3" AfterTargets="Build"  >
+    <Message Text="HERE" Importance="high" />
+    <Message Text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,," Importance="high" />
+  </Target>
+
+
+  <!--<Target Name="TestProp1" >
+    <CreateProperty Value="yes">
+      <Output PropertyName="InsideTrello" TaskParameter="Value"/>
+    </CreateProperty>
+    --><!--<InsideTrello>yes</InsideTrello>-->
+  <!--
+    <Message Text="InsideTrello is changed: $(InsideTrello)" Importance="high" />
+    <Message Text=",,," Importance="high" />
+  </Target>
+
+  <Target Name="TestProp2" AfterTargets="Build" DependsOnTargets="TestProp1" >
+    <Message Text="InsideTrello: $(InsideTrello)" Importance="high" />
+    <Message Text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,," Importance="high" />
+  </Target>
+
+  <Target Name="TestProp3" AfterTargets="Build" DependsOnTargets="TestProp2" Condition="'$(InsideTrello)' != 'yes'"  >
+    <Message Text="TestProp3 : InsideTrello: $(InsideTrello)" Importance="high" />
+    <Message Text="bug! Why here?!" Importance="high" />
+    <Message Text=",,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,,," Importance="high" />
+  </Target>-->
+
+</Project>
+
+<!-- ===================================================================================== -->
+<!-- 6. TestVars n more Ref -->
+
+<!--<Target Name="TestVars"  BeforeTargets="Build">
+    <Message Text="Vars options: " Importance="high" />
+    <Message Text="Subject 1: '$(Subject)'" Importance="high" />
+    <Message Text="Subject 2: &quot;$(Subject)&quot;" Importance="high" />
+    <Message Text="Subject 3: $(Subject)" Importance="high" />
+    <Message Text="xOutLocation: $(xOutLocation)" Importance="high" />
+    <Message Text="xOutParent: $(xOutParent)" Importance="high" />
+    <Message Text="xOutParent3: $(xOutParent3)" Importance="high" />
+    <Message Text="Lib Folder Address calculated: $(LibFolderAddress)" Importance="high" />
+    <Message Text="ZipFile1: $(ZipFile1)" Importance="high" />
+    <Message Text="ZipFile2: $(ZipFile2)" Importance="high" />
+</Target>-->
+
+<!--
+ ===================================================================================== 
+ 2. Imports and usings 
+ <Import Project="$(LibFolder)\tools\MSBuild.Community.Tasks.Targets"/> 
+ <UsingTask AssemblyFile="$(LibFolder)\tools\MSBuild.Community.Tasks.Targets.dll" 
+            TaskName="MSBuild.Community.Tasks.Zip" /> 
+
+<UsingTask
+    TaskName="TrelloMailTask"
+    AssemblyFile="$(LibFolder)\$(LibFolderPart2)"
+  />
+   -->
